@@ -231,3 +231,5 @@ def donor_donated_pets(request, donor_id):
     donor = get_object_or_404(User, id=donor_id)
     donated_pets = Pet.objects.filter(donor=donor)
     return render(request, 'admin/individual_donors.html', {'donor': donor, 'donated_pets': donated_pets})
+
+'''This is for git study'''
