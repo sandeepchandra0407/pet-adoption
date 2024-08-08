@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Form</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #dcd7d5; /* Light gray background color */
+        }
+
+        .card {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5 mb-3">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="card-title">Update Your Profile</h4>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="firstName">First Name</label>
+                                <input type="text" class="form-control" id="firstName" name="f_name" value="{{value.user.first_name}}" placeholder="Enter first name">
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" class="form-control" id="lastName" name="l_name" value="{{value.user.last_name}}" placeholder="Enter last name">
+                            </div>
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" id="username" name="u_name" value="{{value.user.username}}" placeholder="Enter username">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="password">New Password</label>
+                                    <input type="password" class="form-control" id="password" name="pass" placeholder="Enter password">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="confirmPassword">Confirm New Password</label>
+                                    <input type="password" class="form-control" id="confirmPassword" name="c_pass" placeholder="Confirm password">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" value="{{value.user.email}}" placeholder="Enter email">
+                            </div>
+                            <div class="form-group">
+                                <label for="mobile">Mobile</label>
+                                <input type="tel" class="form-control" id="mobile" name="mobile" value="{{value.mobile_number}}" placeholder="Enter mobile number">
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <textarea class="form-control" id="address" name="addr" rows="3" placeholder="Enter address" required>{{value.address}}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="uploadImage">Upload Image</label>
+                                <input type="file" class="form-control-file" name="image" id="uploadImage">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <a href="{% url 'doner_self_profile' %}" class="btn btn-danger" onclick="window.location.reload();">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

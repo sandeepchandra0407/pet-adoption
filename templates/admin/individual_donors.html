@@ -163,7 +163,7 @@
 
             <div class="container-fluid px-4">
                 <div class="row my-5">
-                    <h3 class="fs-4 mb-3">Pets Donated by {{ donor.username }}</h3>
+                    <h3 class="fs-4 mb-3">Pets Donated by {{ donor.first_name }}</h3>
                     <div class="col">
                         <table class="table bg-white rounded shadow-sm table-hover">
                             <thead>
@@ -175,6 +175,7 @@
                                     <th scope="col">Price</th>
                                     <th scope="col">Created At</th>
                                     <th>Pet Image</th>
+                                    <th>Option</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -188,6 +189,9 @@
                                     <td>{{ pet.create_at }}</td>
                                     <td>
                                         <img src="{{ pet.pet_image.url }}" alt="Pet Image" style="width: 50px; height: 50px;" class="rounded">
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'doner_details_admin' %}" class="btn btn-danger">Return</a>
                                     </td>
                                 </tr>
                                 {% endfor %}

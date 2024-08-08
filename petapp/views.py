@@ -39,8 +39,7 @@ def admin_required(view_func):
 
 
 def homepage(request):
-    pets = Pet.objects.filter(is_approved=True,pet_status="Active")
-    print(pets.values())
+    pets = Pet.objects.filter(pet_status="Active")
     return render(request, 'user/home.html', {'pets': pets})
 
 
@@ -57,7 +56,11 @@ def login_page(request):
         user_obj = authenticate(username=user_name,password = user_password)
         if user_obj is not None:
             login(request,user_obj)
-            return redirect('/')
+            if user_obj.usermodel.is_donater:
+                return redirect('doner_home')
+            else:
+                return redirect('/')
+            
 
     return render(request,'user/login.html')
 
@@ -78,7 +81,7 @@ def adopt_page(request,id):
      return redirect('/')
 
 def pet_list(request):
-    pets = Pet.objects.filter(is_approved=True,pet_status="Active")
+    pets = Pet.objects.filter(pet_status="Active")
     categories = PetCategory.objects.all()
     if request.method == "POST":
         search_text = request.POST.get('search_text')
@@ -128,7 +131,7 @@ def register(request):
 
         if User.objects.filter(email=email).exists():
             messages.error(request, 'Email is already registered.')
-            return redirect('user/register_page')
+            return redirect('register_page')
 
         # password = str(random.randint(100000, 999999))
         user_obj = User.objects.create_user(username=username, password=Password, email=email, first_name=first_name, last_name=last_name)
@@ -160,9 +163,9 @@ def register(request):
 def admin_dashboard(request):
     total_users = UserModel.objects.filter(is_user=True).count()
     total_donors = UserModel.objects.filter(is_donater=True).count()
-    total_approved_pets = Pet.objects.filter(is_approved=True).count()
-    pending_pets = Pet.objects.filter(is_approved=False,pet_status="Active")
-    print(User.objects.all().values())
+    total_approved_pets = Pet.objects.all().count()
+    pending_pets = Pet.objects.filter(pet_status="Pending")
+
 
     context = {
         'total_users': total_users,
@@ -176,12 +179,11 @@ def admin_dashboard(request):
 
 def approve_pet(request, pet_id):
     pet = get_object_or_404(Pet, id=pet_id)
-    pet.is_approved = True
+    pet.pet_status="Active"
     pet.save()
     return redirect("/admin-dashboard")
 def reject_pet(request, pet_id):
     pet = get_object_or_404(Pet, id=pet_id)
-    pet.is_approved = False
     pet.pet_status="Rejected"
     pet.save()
     return redirect("/admin-dashboard")
@@ -232,4 +234,117 @@ def donor_donated_pets(request, donor_id):
     donated_pets = Pet.objects.filter(donor=donor)
     return render(request, 'admin/individual_donors.html', {'donor': donor, 'donated_pets': donated_pets})
 
-'''This is for git study'''
+# def user_edit_admin(request,pk):
+#     data = UserModel.objects.get(id=pk)
+#     return render(request,'admin/user_edit.html',{'data':data})
+
+
+# def doner_edit_admin(request,pk):
+#     data = UserModel.objects.get(id=pk)
+#     return render(request,'admin/doner_edit.html',{'data':data})
+
+def user_delete(request,pk):
+    value = UserModel.objects.get(id=pk)
+    value.delete()
+    return redirect('user_details_admin')
+
+def doner_delete(request,pk):
+    value = UserModel.objects.get(id=pk)
+    value.delete()
+    return redirect('doner_details_admin')
+
+def admin_edit_user(request, user_id):
+    user_instance = get_object_or_404(UserModel, id=user_id)
+    
+
+    if request.method == 'POST': 
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        mobile_number = request.POST.get('mobile_number')
+        address = request.POST.get('address')
+
+        # Update user model
+        use_obj = user_instance.user
+        use_obj.first_name = first_name
+        use_obj.last_name = last_name
+        use_obj.email = email
+        use_obj.save()
+
+        # Update user profile
+        user_instance.mobile_number = mobile_number
+        user_instance.address = address
+        user_instance.save()
+
+        # Handle profile image
+        if 'profile_image' in request.FILES:
+            image = request.FILES['profile_image']
+            if ProfileImage.objects.filter(user=use_obj):
+                profile_image_instance = use_obj.profileimage
+                profile_image_instance.profile_image.delete()  # Delete old image
+                profile_image_instance.profile_image = image
+                profile_image_instance.save()
+            else:
+                profile_image_obj = ProfileImage()
+                profile_image_obj.profile_image = image
+                profile_image_obj.user = use_obj
+                profile_image_obj.save()
+                # ProfileImage.objects.create(user=use_obj, profile_image=image)
+
+
+        if user_instance.is_user:
+             return redirect('user_details_admin')
+        else:
+             return redirect('doner_details_admin')
+    context = {
+        'data': user_instance
+        
+    }
+    return render(request, 'admin/admin_edit_user.html', context)
+
+
+@donater_required
+def doner_home(request):
+    donter_obj = request.user
+    # usermodel_obj= donter_obj.usermodel
+    # usermodel_obj.address - "kollom"
+    pet_data = Pet.objects.filter(donor=donter_obj)
+    return render(request,'doner/doner_home.html',{'pets': pet_data})
+
+
+def edit_category_page(request,pk):
+    data = PetCategory.objects.get(id=pk)
+    return render(request,'admin/edit_category.html',{'data':data})
+
+
+def edit_category(request):
+    id = request.POST.get('id')
+    cat_name = request.POST.get('name')
+
+    data = PetCategory.objects.get(id=id)
+    data.name = cat_name
+    data.save()
+    return redirect('category')
+
+@donater_required
+def donor_self_profile(request):
+    user = request.user
+    # user_model = get_object_or_404(UserModel, user=user)
+    return render(request, 'doner/doner_self_profile.html',{'user_model': user})
+
+def doner_edit_profilepage(request,pk):
+    value = UserModel.objects.get(id=pk)
+    return render(request,'doner/doner_edit_profile.html',{'value':value})
+
+def doner_edit_profile(request):
+    id = request.POST.get('id')
+    f_name = request.POST.get('f_name')
+    l_name = request.POST.get('f_name')
+    u_name = request.POST.get('f_name')
+    password = request.POST.get('pass')
+    c_password = request.POST.get('c_pass')
+    email = request.POST.get('email')
+    mobil = request.POST.get('mobile')
+    address = request.POST.get('addr')
+    image = request.FIELS.get('image')
+

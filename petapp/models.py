@@ -15,7 +15,7 @@ class UserModel(models.Model):
         return self.user.username
 
 class ProfileImage(models.Model):
-    user= models.ForeignKey(User,on_delete=models.CASCADE)
+    user= models.OneToOneField(User,on_delete=models.CASCADE)
     profile_image = models.ImageField(upload_to='profile',null=True)
 
 
@@ -31,10 +31,10 @@ class Pet(models.Model):
     category = models.ForeignKey(PetCategory, on_delete=models.CASCADE)
     description = models.TextField()
     price = models.IntegerField()
-    is_approved = models.BooleanField(default=False)
+    
     donor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='donated_pets')
     create_at = models.DateTimeField(auto_now_add=True,null=True)
-    pet_status = models.CharField(max_length=50,default="Active")
+    pet_status = models.CharField(max_length=50,default="Pending")
     pet_image = models.ImageField(upload_to='pet_images',null=True)
 
     def __str__(self):

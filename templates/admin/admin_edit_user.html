@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>Admin Dashboard</title>
+    {% load static %}
     <style>
         :root {
             --main-bg-color: #f4e3d7;
@@ -96,7 +97,6 @@
     </style>
 </head>
 <body>
-    {% load static %}
     <div class="d-flex" id="wrapper">
         <!-- Sidebar -->
         <div class="bg-white" id="sidebar-wrapper">
@@ -161,49 +161,59 @@
 
             <div class="container-fluid px-4">
                 <div class="row my-5">
-                    <h3 class="fs-4 mb-3">Registered Users</h3>
-                    <div class="col">
-                        <table class="table bg-white rounded shadow-sm table-hover">
-                            <thead>
-                                <tr>
-                                    <th scope="col" width="50">No</th>
-                                    <th scope="col">Profile Image</th>
-                                    <th scope="col">First Name</th>
-                                    <th scope="col">Last Name</th>
-                                    <th scope="col">Mobile</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Address</th>
-                                    <th>Option</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for i in users %}
-                                <tr>
-                                    <th scope="row">{{ forloop.counter }}</th>
-                                    <td>
-                                       
-                                        {% if i.user.profileimage.profile_image  %}
-                                            <img src="/media/{{ i.user.profileimage.profile_image }}" alt="Profile Image" class="img-fluid rounded-circle" width="50">
-                                        {% else %}
-                                            <img src="{% static 'avater.webp' %}" alt="Static Image" class="img-fluid rounded-circle" width="50">
-                                        {% endif %}
-                                    </td>
-                                    <td>{{  i.user.profileimage.profile_image }}</td>
-                                    <td>{{ i.user.last_name }}</td>
-                                    <td>{{ i.mobile_number }}</td>
-                                    <td>{{ i.user.email }}</td>
-                                    <td>{{ i.address }}</td>
-                                    <td>
-                                        <a href="{% url 'user_delete_admin' i.id %}" class="btn btn-danger btn-sm">Delete</a><br><br>
-                                        <a href="{% url 'user_edit_admin' i.id %}" class="btn btn-primary btn-sm">Update</a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                    <div class="col-lg-8 mx-auto">
+                        <div class="card shadow-sm">
+                            <div class="card-header">
+                                <h3 class="fs-4 mb-0">Update</h3>
+                            </div>
+                            <div class="card-body">
+                                <form method="POST" action="{% url 'user_edit_admin' data.id %}" enctype="multipart/form-data">
+                                    {% csrf_token %}
+
+                                    <div>
+                                        <input type="hidden" class="form-control" name="id" value="{{data.id}}">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="firstName" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="firstName" name="first_name" value="{{data.user.first_name}}" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="lastName" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="lastName" name="last_name" value="{{data.user.last_name}}" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" name="email" value="{{data.user.email}}" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="mobile" class="form-label">Mobile</label>
+                                        <input type="tel" class="form-control" id="mobile" name="mobile_number" value="{{data.mobile_number}}" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="address" class="form-label">Address</label>
+                                        <textarea class="form-control" id="address" name="address" rows="3" required>{{data.address}}</textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        {% if data.user.profileimage.profile_image  %}
+                                        <img src="/media/{{ data.user.profileimage.profile_image }}" alt="Profile Image" class="img-fluid rounded-circle" width="50">
+                                    {% else %}
+                                        <img src="{% static 'avater.webp' %}" alt="Static Image" class="img-fluid rounded-circle" width="50">
+                                    {% endif %}
+                                        <label for="image" class="form-label">Upload Image</label>
+                                        <input class="form-control" type="file" id="image" name="profile_image" >
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <button type="submit" class="btn btn-primary">Edit</button>
+                                        <a href="{% url 'doner_details_admin' %}" class="btn btn-danger">Cancel</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
         <!-- /#page-content-wrapper -->
     </div>
