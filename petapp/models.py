@@ -9,6 +9,7 @@ class UserModel(models.Model):
     is_admin = models.BooleanField(default=False)
     is_user = models.BooleanField(default=True)
     is_donater = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
     create_at = models.DateTimeField(auto_now_add=True,null=True)
     user_status = models.CharField(max_length=50,default='pending')
     def __str__(self) -> str:

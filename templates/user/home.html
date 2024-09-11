@@ -22,8 +22,6 @@
             overflow: hidden;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s;
-            max-width: 300px; /* Adjust the maximum width */
-            margin: 0 auto; /* Center the card horizontally */
         }
         .card:hover {
             transform: scale(1.02);
@@ -34,16 +32,13 @@
         }
         .card-body {
             background-color: white;
-            padding: 15px; /* Adjust padding */
+            padding: 15px;
         }
         .card-title {
             font-size: 1.25rem;
             font-weight: bold;
         }
         .card-text {
-            color: #6c757d;
-        }
-        .card-text small {
             color: #6c757d;
         }
         .footer {
@@ -75,6 +70,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'adopted_pets' %}">My Adopted Pets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'user_self_profile' %}">Profile</a>
                 </li>
                 {% else %}
                 <li class="nav-item">
@@ -129,10 +127,10 @@
 
         <!-- Content -->
         <div class="container mt-5">
-            <div class="row justify-content-center">
+            <div class="row">
                 {% for pet in pets %}
-                <div class="col-md-4 mb-4 d-flex align-items-stretch">
-                    <a href="{% url 'pet_detail' pet.pk %}" class="text-decoration-none text-dark">
+                <div class="col-sm-12 col-md-6 col-lg-4 mb-4 d-flex align-items-stretch">
+                    <a href="{% url 'pet_detail' pet.pk %}" class="text-decoration-none text-dark w-100">
                         <div class="card h-100">
                             <img src="{{ pet.pet_image.url }}" class="card-img-top" alt="{{ pet.name }}">
                             <div class="card-body">
@@ -151,7 +149,7 @@
     </div>
 
     <!-- Footer -->
-    <div class="footer text-white bg-dark">
+    <div class="footer text-white bg-dark mt-auto">
         <p>&copy; 2024 Pet Adoption. All rights reserved.</p>
     </div>
 

@@ -110,7 +110,7 @@
                     <span class="material-icons me-2">person</span>Users
                 </a>
                 <a href="{% url 'doner_details_admin' %}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
-                    <span class="material-icons me-2">favorite</span>Donors
+                    <span class="material-icons me-2">favorite</span>Doners
                 </a>
                 <a href="{% url 'category' %}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
                     <span class="material-icons me-2">category</span>Categories
@@ -121,16 +121,12 @@
                 <a href="{% url 'admin_adoption_details' %}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
                     <span class="material-icons me-2">admin_panel_settings</span>Adoption
                 </a>
-                <a href="" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
-                    <span class="material-icons me-2">pets</span>Donated Pets
-                </a>
-                <a href="" class="list-group-item list-group-item-action bg-transparent text-danger fw-bold">
+                <a href="{% url 'logout' %}" class="list-group-item list-group-item-action bg-transparent text-danger fw-bold">
                     <span class="material-icons me-2">logout</span>Logout
                 </a>
             </div>
         </div>
         <!-- /#sidebar-wrapper -->
-
         <!-- Page Content -->
         <div id="page-content-wrapper">
             <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
@@ -153,8 +149,8 @@
                                 <i class="fas fa-user me-2"></i>Admin
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#">Profile</a></li>
-                                <li><a class="dropdown-item" href="">Logout</a></li>
+                                <li><a class="dropdown-item" href="{% url 'admin_change_password' %}">Change Password</a></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -189,6 +185,9 @@
                                     <td>{{ pet.create_at }}</td>
                                     <td>
                                         <img src="{{ pet.pet_image.url }}" alt="Pet Image" style="width: 50px; height: 50px;" class="rounded">
+                                    </td>
+                                    <td>    
+                                        <a href="{% url 'admin_edit_pet_page' pet.id %}" class="btn btn-primary btn-sm">Update</a>
                                     </td>
                                     <td>
                                         <a href="{% url 'doner_details_admin' %}" class="btn btn-danger">Return</a>

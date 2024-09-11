@@ -63,8 +63,8 @@
             background-color: #343a40;
             color: #fff;
             text-align: center;
-            padding: 10px 0;
-            margin-top: auto;
+            padding: 2px 0;
+            margin-top: 216px;
         }
     </style>
 </head>
@@ -86,6 +86,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'adopted_pets' %}">My Adopted Pets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'user_self_profile' %}">Profile</a>
                 </li>
                 {% else %}
                 <li class="nav-item">
@@ -117,40 +120,49 @@
                             {% csrf_token %}
                             <div class="form-group">
                                 <label for="firstname">First Name</label>
-                                <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Enter first name" required>
+                                <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Enter first name" value="{{ data.firstname }}" required>
                             </div>
                             <div class="form-group">
                                 <label for="lastname">Last Name</label>
-                                <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Enter last name" required>
+                                <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Enter last name" value="{{ data.lastname }}" required>
                             </div>
                             <div class="form-group">
                                 <label for="username">Username</label>
-                                <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" value="{{ data.username }}" required>
+                                {% if errors.username %}
+                                    <div class="text-danger">{{ errors.username }}</div>
+                                {% endif %}
                             </div>
                             <div class="form-group">
                                 <label for="email">Email address</label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" value="{{ data.email }}" required>
+                                {% if errors.email %}
+                                    <div class="text-danger">{{ errors.email }}</div>
+                                {% endif %}
                             </div>
                             <div class="form-group">
                                 <label for="mobile_number">Mobile Number</label>
-                                <input type="text" class="form-control" id="mobile_number" name="mobile_number" placeholder="Enter mobile number" required>
+                                <input type="text" class="form-control" id="mobile_number" name="mobile_number" placeholder="Enter mobile number" value="{{ data.mobile_number }}" required>
+                                {% if errors.mobile_number %}
+                                    <div class="text-danger">{{ errors.mobile_number }}</div>
+                                {% endif %}
                             </div>
                             <div class="form-group">
                                 <label for="address">Address</label>
-                                <textarea class="form-control" id="address" name="address" rows="3" placeholder="Enter address" required></textarea>
+                                <textarea class="form-control" id="address" name="address" rows="3" placeholder="Enter address" required>{{ data.address }}</textarea>
                             </div>
                             <div class="form-group">
                                 <label for="Password">Password</label>
-                                <input class="form-control" id="Password" name="Password"  placeholder="Enter ur Password" required/>
+                                <input class="form-control" id="Password" name="Password" placeholder="Enter your Password" required/>
                             </div>
                             <div class="form-group">
                                 <label>Role</label>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="role" id="is_user" value="user" required>
+                                    <input class="form-check-input" type="radio" name="role" id="is_user" value="user" {% if data.role == 'user' %}checked{% endif %} required>
                                     <label class="form-check-label" for="is_user">User</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="role" id="is_donater" value="donater" required>
+                                    <input class="form-check-input" type="radio" name="role" id="is_donater" value="donater" {% if data.role == 'donater' %}checked{% endif %} required>
                                     <label class="form-check-label" for="is_donater">Donater</label>
                                 </div>
                             </div>

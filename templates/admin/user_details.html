@@ -104,7 +104,7 @@
                 Pet World
             </div>
             <div class="list-group list-group-flush my-3">
-                <a href="" class="list-group-item list-group-item-action bg-transparent second-text active">
+                <a href="{% url 'admin_dashboard' %}" class="list-group-item list-group-item-action bg-transparent second-text active">
                     <span class="material-icons me-2">dashboard</span>Dashboard
                 </a>
                 <a href="{% url 'user_details_admin' %}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
@@ -122,7 +122,7 @@
                 <a href="{% url 'admin_adoption_details' %}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
                     <span class="material-icons me-2">admin_panel_settings</span>Adoption
                 </a>
-                <a href="" class="list-group-item list-group-item-action bg-transparent text-danger fw-bold">
+                <a href="{% url 'logout' %}" class="list-group-item list-group-item-action bg-transparent text-danger fw-bold">
                     <span class="material-icons me-2">logout</span>Logout
                 </a>
             </div>
@@ -151,8 +151,8 @@
                                 <i class="fas fa-user me-2"></i>Admin
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#">Profile</a></li>
-                                <li><a class="dropdown-item" href="">Logout</a></li>
+                                <li><a class="dropdown-item" href="{% url 'admin_change_password' %}">Change Password</a></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -188,7 +188,7 @@
                                             <img src="{% static 'avater.webp' %}" alt="Static Image" class="img-fluid rounded-circle" width="50">
                                         {% endif %}
                                     </td>
-                                    <td>{{  i.user.profileimage.profile_image }}</td>
+                                    <td>{{ i.user.first_name }}</td>
                                     <td>{{ i.user.last_name }}</td>
                                     <td>{{ i.mobile_number }}</td>
                                     <td>{{ i.user.email }}</td>

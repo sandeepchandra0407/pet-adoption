@@ -16,7 +16,8 @@
             color: #fff;
             text-align: center;
             padding: 10px 0;
-            margin-top: auto;
+            margin-top: 500px;
+            
         }
         .table-responsive {
             margin-top: 20px;
@@ -36,7 +37,7 @@
                     <a class="nav-link" href="{% url 'doner_self_profile' %}">Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Add Pets</a>
+                    <a class="nav-link" href="{% url 'add_pet_page' %}">Add Pets</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Logout</a>
@@ -58,6 +59,8 @@
                         <th>Price</th>
                         <th>Status</th>
                         <th>Created At</th>
+                        <th>Action1</th>
+                        <th>Action2</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -74,7 +77,7 @@
                         <td>{{ pet.name }}</td>
                         <td>{{ pet.category.name }}</td>
                         <td>{{ pet.description }}</td>
-                        <td>${{ pet.price }}</td>
+                        <td>Rs.{{ pet.price }}/-</td>
                         {% if pet.pet_status == "Active" %}
                         <td class="">Approved</td>
                         {% elif pet.pet_status == "Rejected" %}
@@ -84,6 +87,17 @@
                         {% endif %}
                         
                         <td>{{ pet.create_at }}</td>
+
+                        <td>    
+                            <a href="{% url 'edit_pet_page' pet.id%}" class="btn btn-primary btn-sm">Update</a>
+                        </td>
+
+                        <td>
+                            <a href="{% url 'pet_del_doner' pet.id %}" class="btn btn-danger btn-sm">Delete</a> 
+                        </td>
+
+
+
                     </tr>
                     {% endfor %}
                 </tbody>

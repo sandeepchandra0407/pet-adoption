@@ -33,6 +33,16 @@
         }
         .table tbody td img {
             border-radius: 5px;
+            width: 100px; /* Set a fixed width */
+            height: 100px; /* Set a fixed height */
+            object-fit: cover; /* Ensures the image covers the entire area */
+        }
+        .footer {
+            background-color: #343a40;
+            color: #fff;
+            text-align: center;
+            padding: 2px 0;
+            margin-top: 281px;
         }
     </style>
 </head>
@@ -52,8 +62,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'adopted_pets' %}">My Adopted Pets</a>
+                    <a class="nav-link" href="{% url 'user_self_profile' %}">Profile</a>
                 </li>
                 {% else %}
                 <li class="nav-item">
@@ -62,9 +73,6 @@
                 {% endif %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'pet_list' %}">Pets</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register_page' %}">Register</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Contact Us</a>
@@ -93,10 +101,10 @@
                     {% for adoption in adopted_pets %}
                     <tr>
                         <td class="product-details">
-                            {% if adoption.pet.petimage_set.first %}
-                                <img src="{{ adoption.pet.petimage_set.first.image.url }}" alt="{{ adoption.pet.name }}" width="100">
+                            {% if adoption.pet.pet_image %}
+                                <img src="{{ adoption.pet.pet_image.url }}" alt="{{ adoption.pet.name }}">
                             {% else %}
-                                <img src="{% static 'images/default.jpg' %}" alt="Default Image" width="100">
+                                <img src="{% static 'images/default.jpg' %}" alt="Default Image">
                             {% endif %}
                         </td>
                         <td>{{ adoption.pet.name }}</td>
@@ -109,6 +117,11 @@
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2024 Pet Adoption. All rights reserved.</p>
     </div>
 
     <!-- Bootstrap JS and dependencies -->

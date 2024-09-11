@@ -27,7 +27,7 @@
                         <h4 class="card-title">Update Your Profile</h4>
                     </div>
                     <div class="card-body">
-                        <form method="POST" action="{% url 'doner_edit_profile' data.id %}" enctype="multipart/form-data">
+                        <form method="POST" action="{% url 'user_edit_profile' data.id %}" enctype="multipart/form-data">
                             {% csrf_token %}
 
                             <div>
@@ -77,7 +77,7 @@
                                 <input class="form-control" type="file" id="image" name="profile_image" >
                             </div>
                             <button type="submit" class="btn btn-primary">Edit</button>
-                            <a href="{% url 'doner_self_profile' %}" class="btn btn-danger" >Cancel</a>
+                            <a href="{% url 'user_self_profile' %}" class="btn btn-danger" >Cancel</a>
                         </form>
                     </div>
                 </div>

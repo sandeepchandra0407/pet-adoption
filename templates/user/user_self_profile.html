@@ -6,9 +6,19 @@
     <title>Responsive Table Template</title>
     {% load static %}
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+            .footer {
+            background-color: #343a40;
+            color: #fff;
+            text-align: center;
+            padding: 2px 0;
+            margin-top: 216px;
+        }
+    </style>
 </head>
 <body>
 
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Pet World</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,23 +27,35 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'doner_home' %}">Home</a>
+                    <a class="nav-link" href="{% url 'homepage' %}">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'add_pet_page' %}">Add Pets</a>
-                </li>
+                {% if request.user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'adopted_pets' %}">My Adopted Pets</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login_page' %}">Login</a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'pet_list' %}">Pets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact Us</a>
                 </li>
             </ul>
         </div>
     </nav>
 
 <div class="container mt-5">
-    <h2 class="mb-4">profile</h2>
-    <a href="{% url 'doner_change_password' %}" class="btn btn-primary">update password</a>
+    <h2 class="mb-4">Welcome {{ user_model.first_name }}</h2>
+    <a href="{% url 'user_change_pass' %}" class="btn btn-primary">update password</a>
     <div class="table-responsive">
-        <table class="table table-bordered table-hover mt-4">
+        <table class="table table-bordered table-hover">
             <thead class="thead-dark">
                 <tr>
                     <th>First Name</th>
@@ -61,17 +83,23 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{% url 'doner_edit_profile' user_model.usermodel.id %}" class="btn btn-primary">Edit</a>
+                        <a href="{% url 'user_edit_profile' user_model.usermodel.id %}" class="btn btn-primary">Edit</a>
                     </td>
                     <td>
-                        <a href="{% url 'donar_self_delete' user_model.usermodel.id %}" class="btn btn-danger">Delete</a>
+                        <a href="{% url 'user_self_delete' user_model.usermodel.id %}" class="btn btn-danger">Delete</a>
                     </td>
                 </tr>
-                <!-- Additional rows can be added here -->
+              
             </tbody>
         </table>
     </div>
 </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2024 Pet Adoption. All rights reserved.</p>
+    </div>
+
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

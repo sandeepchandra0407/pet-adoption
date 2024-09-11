@@ -55,10 +55,11 @@
         }
 
         .footer {
-            background-color: #f8f9fa;
-            color: #6c757d;
+            background-color: #343a40;
+            color: #fff;
             text-align: center;
-            padding: 10px 0;
+            padding: 2px 0;
+            margin-top: 216px;
         }
 
         .navbar-brand {
@@ -86,17 +87,16 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'adopted_pets' %}">My Adopted Pets</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'user_self_profile' %}">Profile</a>
+                </li>
                 {% else %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'login_page' %}">Login</a>
                 </li>
                 {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'pet_list' %}">Pets</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register_page' %}">Register</a>
-                </li>
+
+
                 <li class="nav-item">
                     <a class="nav-link" href="#">Contact Us</a>
                 </li>

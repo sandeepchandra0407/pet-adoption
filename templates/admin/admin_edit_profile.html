@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>Admin Dashboard</title>
+    {% load static %}
     <style>
         :root {
             --main-bg-color: #f4e3d7;
@@ -115,9 +116,7 @@
                 <a href="{% url 'category' %}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
                     <span class="material-icons me-2">category</span>Categories
                 </a>
-                <a href="" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
-                    <span class="material-icons me-2">library_books</span>Add Poster
-                </a>
+
                 <a href="{% url 'admin_adoption_details' %}" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
                     <span class="material-icons me-2">admin_panel_settings</span>Adoption
                 </a>
@@ -163,10 +162,10 @@
                     <div class="col-lg-8 mx-auto">
                         <div class="card shadow-sm">
                             <div class="card-header">
-                                <h3 class="fs-4 mb-0">Update Doner</h3>
+                                <h3 class="fs-4 mb-0">Update</h3>
                             </div>
                             <div class="card-body">
-                                <form method="POST" action="{% url 'admin_edit_user' data.id %}" enctype="multipart/form-data">
+                                <form method="POST" action="{% url 'profile_edit_admin' data.id %}" enctype="multipart/form-data">
                                     {% csrf_token %}
 
                                     <div>
@@ -182,24 +181,46 @@
                                         <input type="text" class="form-control" id="lastName" name="last_name" value="{{data.user.last_name}}" required>
                                     </div>
                                     <div class="mb-3">
+                                        <label for="username" class="form-label">Username</label>
+                                        <input type="text" class="form-control" id="username" name="username" value="{{data.user.username}}" required>
+                                        {% if errors.username %}
+                                        <div class="text-danger">{{ errors.username }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="mb-3">
                                         <label for="email" class="form-label">Email</label>
                                         <input type="email" class="form-control" id="email" name="email" value="{{data.user.email}}" required>
+                                        {% if errors.email %}
+                                        <div class="text-danger">{{ errors.email }}</div>
+                                        {% endif %}
                                     </div>
                                     <div class="mb-3">
                                         <label for="mobile" class="form-label">Mobile</label>
                                         <input type="tel" class="form-control" id="mobile" name="mobile_number" value="{{data.mobile_number}}" required>
+                                        {% if errors.mobile_number %}
+                                        <div class="text-danger">{{ errors.mobile_number }}</div>
+                                        {% endif %}
                                     </div>
                                     <div class="mb-3">
                                         <label for="address" class="form-label">Address</label>
                                         <textarea class="form-control" id="address" name="address" rows="3" required>{{data.address}}</textarea>
                                     </div>
                                     <div class="mb-3">
+                                        {% if data.user.profileimage.profile_image  %}
+                                        <img src="/media/{{ data.user.profileimage.profile_image }}" alt="Profile Image" class="img-fluid rounded-circle" width="50">
+                                        {% else %}
+                                        <img src="{% static 'avater.webp' %}" alt="Static Image" class="img-fluid rounded-circle" width="50">
+                                        {% endif %}
                                         <label for="image" class="form-label">Upload Image</label>
-                                        <input class="form-control" type="file" id="image" name="profile_image" required>
+                                        <input class="form-control" type="file" id="image" name="profile_image" >
                                     </div>
                                     <div class="d-flex justify-content-between">
                                         <button type="submit" class="btn btn-primary">Edit</button>
+                                        {% if data.is_donater %}
                                         <a href="{% url 'doner_details_admin' %}" class="btn btn-danger">Cancel</a>
+                                        {% else %}
+                                        <a href="{% url 'user_details_admin' %}" class="btn btn-danger">Cancel</a>
+                                        {% endif %}
                                     </div>
                                 </form>
                             </div>
