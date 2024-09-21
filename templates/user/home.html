@@ -64,7 +64,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'homepage' %}">Home</a>
                 </li>
-                {% if request.user.is_authenticated %}
+                {% if request.user.is_authenticated and request.user.usermodel.is_user %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                 </li>

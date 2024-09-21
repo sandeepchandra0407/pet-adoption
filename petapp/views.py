@@ -274,7 +274,7 @@ def user_edit_profile(request, user_id):
                 try:
                     validate_email_address(email)
                 except ValidationError as e:
-                    errors['email'] = str(e)
+                    errors['email'] = str(list(e)[0])
 
 
         try:
@@ -358,15 +358,15 @@ def approve_pet(request, pet_id):
     pet.pet_status="Active"
     pet.save()
     return redirect("/admin-dashboard")
-
+@admin_required
 def admin_self_profile(request):
     user = request.user
     return render(request, 'admin/admin_profile.html',{'user': user})
 
 
 @admin_required
-def admin_edit_profile(request, user_id):
-    user_instance = get_object_or_404(UserModel, id=user_id)
+def admin_edit_profile(request):
+    user_instance = request.user
     
 
     if request.method == 'POST': 
@@ -379,17 +379,17 @@ def admin_edit_profile(request, user_id):
 
 
         errors = {}
-        if user_instance.user.username != username:
+        if user_instance.username != username:
             if User.objects.filter(username=username).exists():
                 errors['username'] = 'Username is already registered.'
-        if user_instance.user.email != email:
+        if user_instance.email != email:
             if User.objects.filter(email=email).exists():
                 errors['email'] = 'Email is already registered.'
             else:
                 try:
                     validate_email_address(email)
                 except ValidationError as e:
-                    errors['email'] = str(e)
+                    errors['email'] = str(list(e)[0])
 
 
         try:
@@ -411,7 +411,7 @@ def admin_edit_profile(request, user_id):
 
 
         # Update user model
-        use_obj = user_instance.user
+        use_obj = user_instance
         use_obj.first_name = first_name
         use_obj.last_name = last_name
         use_obj.email = email
@@ -419,9 +419,11 @@ def admin_edit_profile(request, user_id):
         use_obj.save()
 
         # Update user profile
-        user_instance.mobile_number = mobile_number
-        user_instance.address = address
-        user_instance.save()
+        user_model_obj = user_instance.usermodel
+
+        user_model_obj.mobile_number = mobile_number
+        user_model_obj.address = address
+        user_model_obj.save()
 
         # Handle profile image
         if 'profile_image' in request.FILES:
@@ -546,7 +548,7 @@ def admin_edit_user(request, user_id):
                 try:
                     validate_email_address(email)
                 except ValidationError as e:
-                    errors['email'] = str(e)
+                    errors['email'] = str(list(e)[0])
 
 
         try:
@@ -693,7 +695,6 @@ def admin_edit_pet(request,pk):
         data.name = request.POST.get('petName')
         data.description = request.POST.get('description')
         data.price = request.POST.get('price')
-        data.donor = request.user
         select = request.POST.get('category')
         pet_c = PetCategory.objects.get(id=select)
         data.category= pet_c
@@ -738,7 +739,7 @@ def doner_edit_profile(request, user_id):
                 try:
                     validate_email_address(email)
                 except ValidationError as e:
-                    errors['email'] = str(e)
+                    errors['email'] = str(list(e)[0])
 
 
         try:

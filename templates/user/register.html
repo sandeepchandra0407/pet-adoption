@@ -80,27 +80,16 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'homepage' %}">Home</a>
                 </li>
-                {% if request.user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'adopted_pets' %}">My Adopted Pets</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'user_self_profile' %}">Profile</a>
-                </li>
-                {% else %}
+ 
+  
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'login_page' %}">Login</a>
                 </li>
-                {% endif %}
+
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'pet_list' %}">Pets</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register_page' %}">Register</a>
-                </li>
+
                 <li class="nav-item">
                     <a class="nav-link" href="#">Contact Us</a>
                 </li>

@@ -180,19 +180,19 @@
                                     <td>
                                        
                                         {% if user.profileimage.profile_image  %}
-                                            <img src="/media/{{ i.user.profileimage.profile_image }}" alt="Profile Image" class="img-fluid rounded-circle" width="50">
+                                            <img src="/media/{{ user.profileimage.profile_image }}" alt="Profile Image" class="img-fluid rounded-circle" width="50">
                                         {% else %}
                                             <img src="{% static 'avater.webp' %}" alt="Static Image" class="img-fluid rounded-circle" width="50">
                                         {% endif %}
                                     </td>
                                     <td>{{ user.first_name }}</td>
                                     <td>{{ user.last_name }}</td>
-                                    <td>{{ mobile_number }}</td>
+                                    <td>{{ user.usermodel.mobile_number }}</td>
                                     <td>{{ user.email }}</td>
-                                    <td>{{ user.address }}</td>
+                                    <td>{{ user.usermodel.address }}</td>
                                     <td>
-                                        <a href="" class="btn btn-danger btn-sm">Delete</a><br><br>
-                                        <a href="{% url 'profile_edit_admin' user.id %}" class="btn btn-primary btn-sm">Update</a>
+
+                                        <a href="{% url 'profile_edit_admin' %}" class="btn btn-primary btn-sm">Update</a>
                                     </td>
                                 </tr>
                             </tbody>
