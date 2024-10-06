@@ -44,6 +44,13 @@ class Pet(models.Model):
 # class PetImage(models.Model):
 #     image = models.ImageField(upload_to='pet_images')
 #     pet = models.ForeignKey(Pet,on_delete=models.CASCADE)
+
+
+class Notification(models.Model):
+    donar = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    message = models.CharField(max_length=255)
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
     
 
 class Adoption(models.Model):

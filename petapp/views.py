@@ -87,6 +87,12 @@ def adopt_page(request,id):
      adoption_obj.buyer= user_obj
      adoption_obj.pet=pet_obj
      adoption_obj.save()
+
+     notification_obj = Notification()
+     notification_obj.donar=pet_obj.donor
+     
+     notification_obj.message = f'your pet {pet_obj.name} adopted by {user_obj.username}'
+     notification_obj.save()
      
      return redirect('/')
 
@@ -125,40 +131,6 @@ def adopted_pets_view(request):
 
 import random
 
-# def register(request):
-#     if request.method == 'POST':
-#         first_name = request.POST['firstname']
-#         last_name = request.POST['lastname']
-#         username = request.POST['username']
-#         email = request.POST['email']
-#         mobile_number = request.POST['mobile_number']
-#         Password = request.POST['Password']
-#         address = request.POST['address']
-#         role = request.POST['role']
-
-#         is_user = role == 'user'
-#         is_donater = role == 'donater'
-
-#         if User.objects.filter(email=email).exists():
-#             messages.error(request, 'Email is already registered.')
-#             return redirect('register_page')
-
-#         # password = str(random.randint(100000, 999999))
-#         user_obj = User.objects.create_user(username=username, password=Password, email=email, first_name=first_name, last_name=last_name)
-#         UserModel.objects.create(user=user_obj, mobile_number=mobile_number, address=address, is_user=is_user, is_donater=is_donater)
-        
-#         # send_mail(
-#         #     'Registration Confirmation',
-#         #     f'Your account has been created. Your password is {password}.',
-#         #     'petdonation34@gmail.com',
-#         #     [email],
-#         #     fail_silently=False,
-#         # )
-        
-#         messages.success(request, 'Registration successful. Check your email for the password.')
-#         return redirect('login_page')
-
-#     return render(request, 'user/register.html')
 
 def validate_email_address(email):
     validator = EmailValidator(message="Invalid email format.")
@@ -190,14 +162,26 @@ def register(request):
         username = request.POST['username']
         email = request.POST['email']
         mobile_number = request.POST['mobile_number']
-        password = request.POST['Password']  # This line is present but no password validation is performed
+
         address = request.POST['address']
         role = request.POST['role']
 
         is_user = role == 'user'
         is_donater = role == 'donater'
+        password = str(random.randint(100000, 999999))
 
-        # Validation
+        
+        send_mail(
+            'Registration Confirmation',
+            f'Your account has been created. Your password is {password}.',
+            'petdonation0@gmail.com',
+            [email],
+            fail_silently=False,
+        )
+
+
+
+        # Validation code
         errors = {}
         if User.objects.filter(username=username).exists():
             errors['username'] = 'Username is already registered.'
@@ -218,7 +202,7 @@ def register(request):
             print(errors)
 
         if errors:
-            # If there are validation errors, display them on the form
+            
             for key, error in errors.items():
                 messages.error(request, f"{key}: {error}")
             return render(request, 'user/register.html', {
@@ -226,7 +210,7 @@ def register(request):
                 'data': request.POST
             })
 
-        # If no errors, create the user
+      
         user_obj = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
         UserModel.objects.create(user=user_obj, mobile_number=mobile_number, address=address, is_user=is_user, is_donater=is_donater)
 
@@ -235,12 +219,6 @@ def register(request):
 
     return render(request, 'user/register.html')
     
-# @login_required(login_url='/login_page')
-# def change_password(request):
-#     if request.method=="POST":
-#         password = request.POST.get('password')
-#         user_obj = request.user
-#         user_obj.set_password(password)
 
 @user_required
 def user_self_delete(request,pk):
@@ -285,7 +263,7 @@ def user_edit_profile(request, user_id):
             print(errors)
 
         if errors:
-            # If there are validation errors, display them on the form
+        
             for key, error in errors.items():
                 messages.error(request, f"{key}: {error}")
             return render(request, 'user/user_edit_profile.html', {
@@ -295,7 +273,7 @@ def user_edit_profile(request, user_id):
 
 
 
-        # Update user model
+    
         use_obj = user_instance.user
         use_obj.first_name = first_name
         use_obj.last_name = last_name
@@ -303,17 +281,17 @@ def user_edit_profile(request, user_id):
         use_obj.username = username
         use_obj.save()
 
-        # Update user profile
+   
         user_instance.mobile_number = mobile_number
         user_instance.address = address
         user_instance.save()
 
-        # Handle profile image
+   
         if 'profile_image' in request.FILES:
             image = request.FILES['profile_image']
             if ProfileImage.objects.filter(user=use_obj):
                 profile_image_instance = use_obj.profileimage
-                profile_image_instance.profile_image.delete()  # Delete old image
+                profile_image_instance.profile_image.delete()  
                 profile_image_instance.profile_image = image
                 profile_image_instance.save()
             else:
@@ -321,7 +299,7 @@ def user_edit_profile(request, user_id):
                 profile_image_obj.profile_image = image
                 profile_image_obj.user = use_obj
                 profile_image_obj.save()
-                # ProfileImage.objects.create(user=use_obj, profile_image=image)
+
         return redirect('user_self_profile')
 
 
@@ -400,7 +378,7 @@ def admin_edit_profile(request):
             print(errors)
 
         if errors:
-            # If there are validation errors, display them on the form
+
             for key, error in errors.items():
                 messages.error(request, f"{key}: {error}")
             return render(request, 'admin/admin_edit_profile.html', {
@@ -410,7 +388,7 @@ def admin_edit_profile(request):
 
 
 
-        # Update user model
+ 
         use_obj = user_instance
         use_obj.first_name = first_name
         use_obj.last_name = last_name
@@ -418,14 +396,14 @@ def admin_edit_profile(request):
         use_obj.username = username
         use_obj.save()
 
-        # Update user profile
+     
         user_model_obj = user_instance.usermodel
 
         user_model_obj.mobile_number = mobile_number
         user_model_obj.address = address
         user_model_obj.save()
 
-        # Handle profile image
+    
         if 'profile_image' in request.FILES:
             image = request.FILES['profile_image']
             if ProfileImage.objects.filter(user=use_obj):
@@ -505,14 +483,7 @@ def donor_donated_pets(request, donor_id):
     donated_pets = Pet.objects.filter(donor=donor)
     return render(request, 'admin/individual_donors.html', {'donor': donor, 'donated_pets': donated_pets})
 
-# def user_edit_admin(request,pk):
-#     data = UserModel.objects.get(id=pk)
-#     return render(request,'admin/user_edit.html',{'data':data})
 
-
-# def doner_edit_admin(request,pk):
-#     data = UserModel.objects.get(id=pk)
-#     return render(request,'admin/doner_edit.html',{'data':data})
 @admin_required
 def user_delete(request,pk):
     value = UserModel.objects.get(id=pk)
@@ -569,7 +540,7 @@ def admin_edit_user(request, user_id):
 
 
 
-        # Update user model
+       
         use_obj = user_instance.user
         use_obj.first_name = first_name
         use_obj.last_name = last_name
@@ -577,17 +548,16 @@ def admin_edit_user(request, user_id):
         use_obj.username = username
         use_obj.save()
 
-        # Update user profile
         user_instance.mobile_number = mobile_number
         user_instance.address = address
         user_instance.save()
 
-        # Handle profile image
+     
         if 'profile_image' in request.FILES:
             image = request.FILES['profile_image']
             if ProfileImage.objects.filter(user=use_obj):
                 profile_image_instance = use_obj.profileimage
-                profile_image_instance.profile_image.delete()  # Delete old image
+                profile_image_instance.profile_image.delete()  
                 profile_image_instance.profile_image = image
                 profile_image_instance.save()
             else:
@@ -595,7 +565,7 @@ def admin_edit_user(request, user_id):
                 profile_image_obj.profile_image = image
                 profile_image_obj.user = use_obj
                 profile_image_obj.save()
-                # ProfileImage.objects.create(user=use_obj, profile_image=image)
+            
 
 
         if user_instance.is_user:
@@ -612,10 +582,19 @@ def admin_edit_user(request, user_id):
 @donater_required
 def doner_home(request):
     donter_obj = request.user
-    # usermodel_obj= donter_obj.usermodel
-    # usermodel_obj.address - "kollom"
+
+    notifiction_data = Notification.objects.filter(is_read=False,donar=donter_obj)
+    notifiction_count= notifiction_data.count()
+
     pet_data = Pet.objects.filter(donor=donter_obj)
-    return render(request,'doner/doner_home.html',{'pets': pet_data})
+    return render(request,'doner/doner_home.html',{'pets': pet_data,"notifications":notifiction_data,'notifiction_count':notifiction_count})
+
+@login_required
+def mark_notification_as_read(request, notification_id):
+    notification = Notification.objects.get(id=notification_id)
+    notification.is_read = True
+    notification.save()
+    return redirect('doner_home')
 
 @admin_required
 def edit_category_page(request,pk):
@@ -646,7 +625,7 @@ def admin_change_password(request):
         if not user_obj.check_password(old_password):
             print('old check')
             errors['old_password'] ='Old password is incorrect.'
-            # errors==={'old_password': 'Old password is incorrect.'}
+       
             return render(request, 'admin/admin_change_pass.html',{'errors':errors})
         
         try:
@@ -710,10 +689,7 @@ def admin_edit_pet(request,pk):
 def donor_self_profile(request):
     user = request.user
     return render(request, 'doner/doner_self_profile.html',{'user_model': user})
-# @donater_required
-# def doner_edit_profilepage(request,pk):
-#     value = UserModel.objects.get(id=pk)
-#     return render(request,'doner/doner_edit_profile.html',{'value':value})
+
 @donater_required
 def doner_edit_profile(request, user_id):
     user_instance = get_object_or_404(UserModel, id=user_id)
@@ -750,7 +726,7 @@ def doner_edit_profile(request, user_id):
             print(errors)
 
         if errors:
-            # If there are validation errors, display them on the form
+      
             for key, error in errors.items():
                 messages.error(request, f"{key}: {error}")
             return render(request, 'doner/doner_edit_profile.html', {
@@ -760,7 +736,7 @@ def doner_edit_profile(request, user_id):
 
 
 
-        # Update user model
+     
         use_obj = user_instance.user
         use_obj.first_name = first_name
         use_obj.last_name = last_name
@@ -768,17 +744,17 @@ def doner_edit_profile(request, user_id):
         use_obj.username = username
         use_obj.save()
 
-        # Update user profile
+     
         user_instance.mobile_number = mobile_number
         user_instance.address = address
         user_instance.save()
 
-        # Handle profile image
+      
         if 'profile_image' in request.FILES:
             image = request.FILES['profile_image']
             if ProfileImage.objects.filter(user=use_obj):
                 profile_image_instance = use_obj.profileimage
-                profile_image_instance.profile_image.delete()  # Delete old image
+                profile_image_instance.profile_image.delete() 
                 profile_image_instance.profile_image = image
                 profile_image_instance.save()
             else:
@@ -786,7 +762,7 @@ def doner_edit_profile(request, user_id):
                 profile_image_obj.profile_image = image
                 profile_image_obj.user = use_obj
                 profile_image_obj.save()
-                # ProfileImage.objects.create(user=use_obj, profile_image=image)
+
         return redirect('doner_self_profile')
 
 

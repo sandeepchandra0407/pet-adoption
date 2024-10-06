@@ -45,7 +45,9 @@ urlpatterns = [
     path('edit_pet_page/<int:pk>',views.edit_pet_page,name='edit_pet_page'),
     path('pet_edit/<int:pk>',views.edit_pet, name='pet_edit'),
     path('pet_del_doner/<int:pk>', views.pet_del_doner, name='pet_del_doner'),
-    path('doner_change_password',views.doner_change_password,name='doner_change_password')
+    path('doner_change_password',views.doner_change_password,name='doner_change_password'),
+    path('notification/read/<int:notification_id>/', views.mark_notification_as_read, name='mark_notification_as_read'),
+
 
 ]
 
